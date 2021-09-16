@@ -23,16 +23,17 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import shorteningservices.URLShortenerApplication;
 import shorteningservices.entity.URL;
 import shorteningservices.service.URLService;
 
 @RestController
 @RequestMapping("/api")
 public class URLController {
-	
+
 	@Autowired
 	private URLService urlService;
-	
+
 	@GetMapping("/urls")
 	Iterable<URL> all() {
 		return urlService.findAll();
@@ -43,21 +44,23 @@ public class URLController {
 		return urlService.findByID(id);
 	}
 
-	
 	@GetMapping("/shortenedURL/{alias}")
 	public void redirect(@PathVariable String alias, HttpServletResponse response) throws IOException {
-		System.out.println("Gonna send redirect to "+ urlService.findOriginalByAlias(alias));
-		response.sendRedirect("http://"+urlService.findOriginalByAlias(alias));
+		System.out.println("Gonna send redirect to " + urlService.findOriginalByAlias(alias));
+		response.sendRedirect("http://" + urlService.findOriginalByAlias(alias));
 	}
 
 	@PostMapping("/urls")
 	void newURL(@Valid @RequestBody URL newURL) {
+		if (newURL.getAlias() == null) {
+			newURL.setAlias(URLShortenerApplication.hashToString(Math.abs(newURL.getOriginal().hashCode())));
+		}
 		urlService.saveURL(newURL);
 	}
 
 	@PutMapping("/urls")
 	void replaceURL(@Valid @RequestBody URL newURL) {
-		urlService.saveURL(newURL);
+		urlService.replaceAlias(newURL.getAlias(), newURL.getOriginal());
 	}
 
 	@DeleteMapping("/urls/{id}")

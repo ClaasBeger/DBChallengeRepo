@@ -19,7 +19,6 @@ public class URL {
 	@NotBlank
 	String original;
 	
-	@NotBlank
 	String alias;
 	
 	public URL() {};

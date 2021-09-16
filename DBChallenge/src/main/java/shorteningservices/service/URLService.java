@@ -39,5 +39,17 @@ public class URLService {
 	public String findOriginalByAlias(String alias) {
 		return urlRepo.findOriginalByAlias(alias);
 	}
+	
+	public Boolean replaceAlias(String alias, String original) {
+		try {
+			urlRepo.replaceAlias(alias, original);
+			return true;
+		}
+		catch(Exception e) {
+			System.err.println("Unable to replace URL with Original: "+ original);
+			e.printStackTrace();
+			return false;
+		}
+	}
 
 }

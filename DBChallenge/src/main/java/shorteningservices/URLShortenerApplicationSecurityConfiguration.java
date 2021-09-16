@@ -9,12 +9,18 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
+
 @Configuration
 public class URLShortenerApplicationSecurityConfiguration  extends WebSecurityConfigurerAdapter{
+	
+	private static final String[] AUTH_WHITELIST = {
+			   "/api/**", "/swagger-resources", "/swagger-resources/**",
+			 };
+	
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 		.authorizeRequests()
-		.mvcMatchers("/api/**").permitAll();
+		.mvcMatchers("/**").permitAll();
 //		.mvcMatchers("/h2-console/**").permitAll()// (after other mvcMatchers)
 //		.mvcMatchers("/api/customers/**").hasRole("ADMIN")
 //		.mvcMatchers("/api/ServicePoint").hasRole("ADMIN")
@@ -23,8 +29,9 @@ public class URLShortenerApplicationSecurityConfiguration  extends WebSecurityCo
 //		.formLogin().and()                    // you now get a popup instead of a dedicated page
 //		.httpBasic();
 //		http.csrf().disable(); // after .httpBasic();
-//		http.headers().frameOptions().disable(); // after .httpBasic();
+		http.headers().frameOptions().disable(); // after .httpBasic();
 		
+		http.cors().and().csrf().disable();
 		
 	    http
 		.sessionManagement()
