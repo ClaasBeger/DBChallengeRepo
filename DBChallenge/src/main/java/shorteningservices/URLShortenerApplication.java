@@ -97,8 +97,10 @@ public class URLShortenerApplication {
 		
 		String ownedURL = "www.youtube.com";
 		User TestUser = new User("FirstName", "LastName", "Username@RandomMail.com", "****");
+		URL u = new URL(ownedURL, hashToString(Math.abs(ownedURL.hashCode())), TestUser);
+		TestUser.addURL(u);
 		userService.save(TestUser);
-		urlService.saveURL(new URL(ownedURL, hashToString(Math.abs(ownedURL.hashCode())), TestUser.getId()));
+		urlService.saveURL(u);
 	}
 
 }

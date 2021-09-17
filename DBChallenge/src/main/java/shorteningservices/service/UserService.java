@@ -63,6 +63,14 @@ public class UserService implements UserDetailsService {
 
 	}
 	
+	public void replaceUsername(User updatedUser) {
+		userRepository.replaceUsername(updatedUser.getId(), updatedUser.getUsername());
+	}
+	
+	public void replacePassword(User updatedUser) {
+		userRepository.replacePassword(updatedUser.getId(), bCryptPasswordEncoder.encode(updatedUser.getPassword()));
+	}
+	
 	public Iterable<URL> findAllURLs(Integer UserID){
 		return userRepository.findAllURLs(UserID).orElseThrow(() -> new UserNotFoundException(UserID));
 	}

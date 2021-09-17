@@ -50,17 +50,29 @@ public class UserController {
 	
 	@PostMapping("/users/{userID}/urls")
 	void newURL(@Valid @RequestBody URL newURL, @PathVariable int userID) {
-		newURL.setUser(userID);
+		User owner = service.findById(userID);
+		newURL.setUser(owner);
 		if (newURL.getAlias() == null) {
 			newURL.setAlias(URLShortenerApplication.hashToString(Math.abs(newURL.getOriginal().hashCode())));
 		}
+		owner.addURL(newURL);
 		System.out.println("Adding custom entry : "+ newURL.toString());
 		urlService.saveURL(newURL);
+		service.save(owner);
 	}
 	
-	@PutMapping("/users")
-	void replaceUser(@Valid @RequestBody User newUser) {
-		service.save(newUser);
+	@PutMapping("/users/{userID}/replace/{newUsername}")
+	void replaceUname(@Valid @RequestBody User newUser,@PathVariable Integer userID, @PathVariable String newUsername) {
+		newUser.setusername(newUsername);
+		newUser.setId(userID);
+		System.out.println(newUser.toString());
+		service.replaceUsername(newUser);
+	}
+	
+	@PutMapping("/users/{userID}/replace")
+	void replacePw(@Valid @RequestBody User newUser, @PathVariable Integer userID) {
+		newUser.setId(userID);
+		service.replacePassword(newUser);
 	}
 	
 	@DeleteMapping("/users/{id}")

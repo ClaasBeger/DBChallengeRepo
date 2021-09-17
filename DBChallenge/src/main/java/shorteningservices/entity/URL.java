@@ -1,12 +1,16 @@
 package shorteningservices.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "URLmapping")
@@ -17,11 +21,13 @@ public class URL {
 	private int ID;
 	
 	@NotBlank
-	String original;
+	private String original;
 	
-	String alias;
+	private String alias;
 	
-	Integer ownerID;
+	@ManyToOne(cascade=CascadeType.PERSIST)
+	@JsonIgnoreProperties({"urls"})
+	private User owner;
 	
 	public URL() {};
 	
@@ -30,10 +36,10 @@ public class URL {
 		this.alias = alias;
 	}
 	
-	public URL(String original, String alias, Integer user) {
+	public URL(String original, String alias, User user) {
 		this.original = original;
 		this.alias = alias;
-		this.ownerID = user;
+		this.owner = user;
 	}
 	
 	public int getID() {
@@ -60,12 +66,12 @@ public class URL {
 		this.alias = newAlias;
 	}
 	
-	public Integer getOwner() {
-		return this.ownerID;
+	public User getOwner() {
+		return this.owner;
 	}
 	
-	public void setUser(Integer newUserID) {
-		this.ownerID = newUserID;
+	public void setUser(User newUser) {
+		this.owner = newUser;
 	}
 	
 	@Override
@@ -74,7 +80,7 @@ public class URL {
 			return "URL with the original value of "+ getOriginal() + "and an alias value of "+ getAlias()+" with the ID "+ getID();
 		}
 		else {
-			return "URL with the original value of "+ getOriginal() + "and an alias value of "+ getAlias()+" with the ID "+ getID()+" and an Owner ID of "+ getOwner();
+			return "URL with the original value of "+ getOriginal() + " and an alias value of "+ getAlias()+" with the ID "+ getID()+" and the Owner "+this.owner.signature();
 		}
 	}
 
