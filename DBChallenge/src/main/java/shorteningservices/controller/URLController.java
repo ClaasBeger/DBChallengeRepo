@@ -55,6 +55,7 @@ public class URLController {
 		if (newURL.getAlias() == null) {
 			newURL.setAlias(URLShortenerApplication.hashToString(Math.abs(newURL.getOriginal().hashCode())));
 		}
+		System.out.println(newURL.toString());
 		urlService.saveURL(newURL);
 	}
 

@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import shorteningservices.entity.URL;
 import shorteningservices.entity.User;
 import shorteningservices.exception.UserNotFoundException;
 import shorteningservices.repository.UserRepository;
@@ -60,5 +61,9 @@ public class UserService implements UserDetailsService {
 			System.err.println("Unable to delete User with ID: " + userId);
 		}
 
+	}
+	
+	public Iterable<URL> findAllURLs(Integer UserID){
+		return userRepository.findAllURLs(UserID).orElseThrow(() -> new UserNotFoundException(UserID));
 	}
 }

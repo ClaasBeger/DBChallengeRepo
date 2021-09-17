@@ -21,11 +21,19 @@ public class URL {
 	
 	String alias;
 	
+	Integer ownerID;
+	
 	public URL() {};
 	
 	public URL(String original, String alias) {
 		this.original = original;
 		this.alias = alias;
+	}
+	
+	public URL(String original, String alias, Integer user) {
+		this.original = original;
+		this.alias = alias;
+		this.ownerID = user;
 	}
 	
 	public int getID() {
@@ -52,9 +60,22 @@ public class URL {
 		this.alias = newAlias;
 	}
 	
+	public Integer getOwner() {
+		return this.ownerID;
+	}
+	
+	public void setUser(Integer newUserID) {
+		this.ownerID = newUserID;
+	}
+	
 	@Override
 	public String toString() {
-		return "URL with the original value of "+ getOriginal() + "and an alias value of "+ getAlias()+" with the ID "+ getID();
+		if(getOwner() == null) {
+			return "URL with the original value of "+ getOriginal() + "and an alias value of "+ getAlias()+" with the ID "+ getID();
+		}
+		else {
+			return "URL with the original value of "+ getOriginal() + "and an alias value of "+ getAlias()+" with the ID "+ getID()+" and an Owner ID of "+ getOwner();
+		}
 	}
 
 }

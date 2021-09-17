@@ -7,13 +7,18 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 
 import shorteningservices.entity.URL;
+import shorteningservices.entity.User;
 import shorteningservices.service.URLService;
+import shorteningservices.service.UserService;
 
 @SpringBootApplication
 public class URLShortenerApplication {
 
 	@Autowired
 	private URLService urlService;
+	
+	@Autowired
+	private UserService userService;
 	
 	//URL shortening logic partially adapted from https://www.geeksforgeeks.org/how-to-design-a-tiny-url-or-url-shortener/
 	public boolean shorten(String original, String customAlias) {
@@ -89,6 +94,11 @@ public class URLShortenerApplication {
 		String testURL2 = "www.yahoo.com";
 		shorten(testURL2, null);
 		// instantiate test data
+		
+		String ownedURL = "www.youtube.com";
+		User TestUser = new User("FirstName", "LastName", "Username@RandomMail.com", "****");
+		userService.save(TestUser);
+		urlService.saveURL(new URL(ownedURL, hashToString(Math.abs(ownedURL.hashCode())), TestUser.getId()));
 	}
 
 }
