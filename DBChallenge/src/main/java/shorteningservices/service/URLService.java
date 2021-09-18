@@ -51,5 +51,9 @@ public class URLService {
 			return false;
 		}
 	}
+	
+	public Integer findObjectIDByOriginal(String original) {
+		return urlRepo.findObjectIDByOriginal(original);
+	}
 
 }

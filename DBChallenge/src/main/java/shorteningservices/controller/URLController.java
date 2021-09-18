@@ -3,6 +3,8 @@ package shorteningservices.controller;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
+import java.util.LinkedList;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -24,7 +26,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import shorteningservices.URLShortenerApplication;
+import shorteningservices.entity.CallStatistics;
 import shorteningservices.entity.URL;
+import shorteningservices.entity.User;
+import shorteningservices.service.StatisticsService;
 import shorteningservices.service.URLService;
 
 @RestController
@@ -33,6 +38,9 @@ public class URLController {
 
 	@Autowired
 	private URLService urlService;
+	
+	@Autowired
+	private StatisticsService statService;
 
 	@GetMapping("/urls")
 	Iterable<URL> all() {
@@ -47,6 +55,9 @@ public class URLController {
 	@GetMapping("/shortenedURL/{alias}")
 	public void redirect(@PathVariable String alias, HttpServletResponse response) throws IOException {
 		System.out.println("Gonna send redirect to " + urlService.findOriginalByAlias(alias));
+		urlService.findByID(urlService.findObjectIDByOriginal(urlService.findOriginalByAlias(alias))).getStats().recordCall(null,
+				LocalDateTime.now());
+		statService.saveStats(urlService.findByID(urlService.findObjectIDByOriginal(urlService.findOriginalByAlias(alias))).getStats());
 		response.sendRedirect("http://" + urlService.findOriginalByAlias(alias));
 	}
 
@@ -56,7 +67,9 @@ public class URLController {
 			newURL.setAlias(URLShortenerApplication.hashToString(Math.abs(newURL.getOriginal().hashCode())));
 		}
 		System.out.println(newURL.toString());
+		newURL.setStats(new CallStatistics(null, LocalDateTime.now(), new LinkedList<LocalDateTime>(),0, new LinkedList<User>()));
 		urlService.saveURL(newURL);
+		statService.saveStats(newURL.getStats());
 	}
 
 	@PutMapping("/urls")
@@ -67,6 +80,11 @@ public class URLController {
 	@DeleteMapping("/urls/{id}")
 	void deleteURL(@PathVariable int id) {
 		urlService.deleteById(id);
+	}
+	
+	@GetMapping("/urls/{alias}/showStats")
+	String displayStatistics(@PathVariable String alias) {
+		return urlService.findByID(urlService.findObjectIDByOriginal(urlService.findOriginalByAlias(alias))).getStats().toString();
 	}
 
 }

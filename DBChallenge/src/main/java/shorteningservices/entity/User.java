@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
@@ -43,6 +44,9 @@ public class User implements UserDetails {
 	@OneToMany(mappedBy = "owner", cascade = CascadeType.PERSIST)
 	@JsonIgnoreProperties({"owner"})
 	private List<URL> urls;
+	
+	@Transient
+	private List<CallStatistics> stats;
 	
 	protected UserRole userRole = UserRole.ROLE_USER;
 	

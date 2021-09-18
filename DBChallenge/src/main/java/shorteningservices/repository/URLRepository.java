@@ -18,5 +18,8 @@ public interface URLRepository extends JpaRepository<URL,Integer> {
 	@Modifying
 	@Query("UPDATE URL u SET u.alias=?1 WHERE u.original=?2")
 	Integer replaceAlias(String alias, String original);
+	
+	@Query("SELECT u.id FROM URL u WHERE u.original=?1")
+	Integer findObjectIDByOriginal(String original);
 
 }

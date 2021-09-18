@@ -4,10 +4,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalDateTime;
+import java.util.LinkedList;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import shorteningservices.URLShortenerApplication;
+import shorteningservices.entity.CallStatistics;
 import shorteningservices.entity.URL;
 import shorteningservices.entity.User;
 import shorteningservices.service.UserService;
@@ -62,5 +66,16 @@ public class URLShortenerApplicationUnitTests {
 		assertTrue(testURL.getOwner()==null);
 	}
 	
+	@Test
+	public void recordCall() {
+		URL testURL = new URL("www.google.com", "alias", null);
+		testURL.setStats(new CallStatistics(null, LocalDateTime.now(), new LinkedList<LocalDateTime>(),0, new LinkedList<User>()));
+		LocalDateTime creationTime = LocalDateTime.now();
+		testURL.getStats().recordCall(null, creationTime);
+		
+		assertEquals(testURL.getStats().getCallTimes().get(0), creationTime);
+		assertTrue(testURL.getStats().getCallsTotal() == 1);
+		assertTrue(testURL.getStats().getCreator() == null);
+	}
 	
 }

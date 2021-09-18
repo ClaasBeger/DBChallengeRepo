@@ -1,5 +1,8 @@
 package shorteningservices.entity;
 
+import java.time.LocalDateTime;
+import java.util.LinkedList;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 
@@ -7,10 +10,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Entity
 @Table(name = "URLmapping")
@@ -28,6 +34,9 @@ public class URL {
 	@ManyToOne(cascade=CascadeType.PERSIST)
 	@JsonIgnoreProperties({"urls"})
 	private User owner;
+	
+	@OneToOne(cascade=CascadeType.PERSIST)
+	private CallStatistics stats;
 	
 	public URL() {};
 	
@@ -73,6 +82,15 @@ public class URL {
 	public void setUser(User newUser) {
 		this.owner = newUser;
 	}
+	
+	public CallStatistics getStats() {
+		return this.stats;
+	}
+	
+	public void setStats(CallStatistics newStats) {
+		this.stats = newStats;
+	}
+	
 	
 	@Override
 	public String toString() {
