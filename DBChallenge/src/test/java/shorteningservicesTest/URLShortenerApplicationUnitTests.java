@@ -9,6 +9,7 @@ import java.util.LinkedList;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import shorteningservices.URLShortenerApplication;
 import shorteningservices.entity.CallStatistics;
@@ -17,6 +18,7 @@ import shorteningservices.entity.User;
 import shorteningservices.service.UserService;
 
 public class URLShortenerApplicationUnitTests {
+	
 
 	@Test
 	public void idConversionTest() {

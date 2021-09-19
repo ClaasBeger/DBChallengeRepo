@@ -95,7 +95,7 @@ public class URL {
 	@Override
 	public String toString() {
 		if (getOwner() == null) {
-			return "URL with the original value of " + getOriginal() + "and an alias value of " + getAlias()
+			return "URL with the original value of " + getOriginal() + " and an alias value of " + getAlias()
 					+ " with the ID " + getID();
 		} else {
 			return "URL with the original value of " + getOriginal() + " and an alias value of " + getAlias()

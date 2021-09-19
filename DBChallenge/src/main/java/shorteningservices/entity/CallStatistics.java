@@ -32,8 +32,8 @@ public class CallStatistics {
 
 	private int callsTotal;
 
-	@ManyToMany(cascade = CascadeType.ALL)
-	private List<User> callers;
+	@ElementCollection(targetClass = String.class)
+	private List<String> callers;
 
 	public User getCreator() {
 		return creator;
@@ -67,11 +67,11 @@ public class CallStatistics {
 		this.callsTotal = callsTotal;
 	}
 
-	public List<User> getCallers() {
+	public List<String> getCallers() {
 		return callers;
 	}
 
-	public void setCallers(List<User> callers) {
+	public void setCallers(List<String> callers) {
 		this.callers = callers;
 	}
 
@@ -90,7 +90,7 @@ public class CallStatistics {
 	};
 
 	public CallStatistics(User createdBy, LocalDateTime create, List<LocalDateTime> calls, int total,
-			List<User> users) {
+			List<String> users) {
 		this.creator = createdBy;
 		this.creationTime = create;
 		this.callTimes = calls;
@@ -98,8 +98,10 @@ public class CallStatistics {
 		this.callers = users;
 	}
 
-	public void recordCall(User caller, LocalDateTime callTime) {
-		this.callers.add(caller);
+	public void recordCall(String callerName, LocalDateTime callTime) {
+		this.callers.add(callerName);
+		System.out.println(callers.toString());
+		System.out.println(callers.size());
 		this.callsTotal = this.callsTotal + 1;
 		this.callTimes.add(callTime);
 	}
@@ -110,26 +112,18 @@ public class CallStatistics {
 	 */
 	@Override
 	public String toString() {
-		List<String> usernames = new LinkedList<String>();
 		List<String> dates = new LinkedList<String>();
-		callers.forEach(c -> {
-			if (c == null) {
-				usernames.add("Unknown User");
-			} else {
-				usernames.add(c.getusername());
-			}
-		});
 		callTimes.forEach(t -> dates.add(t.toString()));
 		if (this.creator != null) {
 			return "The URL with an original value of " + url.getOriginal() + " and an alias " + url.getAlias()
 					+ " was created by " + creator.getusername() + " at " + creationTime.toString()
 					+ "\nFor this entry, " + callsTotal + " calls were received. These took place at "
-					+ dates.toString() + " and were issued by " + usernames.toString();
+					+ dates.toString() + " and were issued by " + callers.toString();
 		} else {
 			return "The URL with an original value of " + url.getOriginal() + " and an alias " + url.getAlias()
 					+ " was created by an Unknown User at " + creationTime.toString() + "\nFor this entry, "
 					+ callsTotal + " calls were received. These took place at " + dates.toString()
-					+ " and were issued by " + usernames.toString();
+					+ " and were issued by " + callers.toString();
 		}
 	}
 }

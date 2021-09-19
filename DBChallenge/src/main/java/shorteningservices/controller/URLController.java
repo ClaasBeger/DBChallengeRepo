@@ -56,22 +56,23 @@ public class URLController {
 	public void redirect(@PathVariable String alias, HttpServletResponse response) throws IOException {
 		System.out.println("Gonna send redirect to " + urlService.findOriginalByAlias(alias));
 		urlService.findByID(urlService.findObjectIDByOriginal(urlService.findOriginalByAlias(alias))).getStats()
-				.recordCall(null, LocalDateTime.now());
+				.recordCall("Unknown User", LocalDateTime.now());
 		statService.saveStats(urlService
 				.findByID(urlService.findObjectIDByOriginal(urlService.findOriginalByAlias(alias))).getStats());
 		response.sendRedirect("http://" + urlService.findOriginalByAlias(alias));
 	}
 
 	@PostMapping("/urls")
-	void newURL(@Valid @RequestBody URL newURL) {
+	String newURL(@Valid @RequestBody URL newURL) {
 		if (newURL.getAlias() == null) {
 			newURL.setAlias(URLShortenerApplication.hashToString(Math.abs(newURL.getOriginal().hashCode())));
 		}
 		System.out.println(newURL.toString());
 		newURL.setStats(new CallStatistics(null, LocalDateTime.now(), new LinkedList<LocalDateTime>(), 0,
-				new LinkedList<User>()));
+				new LinkedList<String>()));
 		urlService.saveURL(newURL);
 		statService.saveStats(newURL.getStats());
+		return "Your generated short alias is "+newURL.getAlias();
 	}
 
 	@PutMapping("/urls")

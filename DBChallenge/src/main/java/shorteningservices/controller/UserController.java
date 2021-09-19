@@ -55,7 +55,7 @@ public class UserController {
 	}
 
 	@PostMapping("/users/{userID}/urls")
-	void newURL(@Valid @RequestBody URL newURL, @PathVariable int userID) {
+	String newURL(@Valid @RequestBody URL newURL, @PathVariable int userID) {
 		User owner = service.findById(userID);
 		newURL.setUser(owner);
 		if (newURL.getAlias() == null) {
@@ -64,10 +64,11 @@ public class UserController {
 		owner.addURL(newURL);
 		System.out.println("Adding custom entry : " + newURL.toString());
 		newURL.setStats(new CallStatistics(null, LocalDateTime.now(), new LinkedList<LocalDateTime>(), 0,
-				new LinkedList<User>()));
+				new LinkedList<String>()));
 		urlService.saveURL(newURL);
 		service.save(owner);
 		statService.saveStats(newURL.getStats());
+		return "Your generated short alias is "+newURL.getAlias();
 	}
 
 	@PutMapping("/users/{userID}/replace/{newUsername}")
@@ -103,7 +104,7 @@ public class UserController {
 		System.out.println("Gonna send redirect request from " + service.findById(id).getusername() + " to "
 				+ urlService.findOriginalByAlias(alias));
 		urlService.findByID(urlService.findObjectIDByOriginal(urlService.findOriginalByAlias(alias))).getStats()
-				.recordCall(service.findById(id), LocalDateTime.now());
+				.recordCall(service.findById(id).getusername(), LocalDateTime.now());
 		statService.saveStats(urlService
 				.findByID(urlService.findObjectIDByOriginal(urlService.findOriginalByAlias(alias))).getStats());
 		response.sendRedirect("http://" + urlService.findOriginalByAlias(alias));

@@ -45,9 +45,6 @@ public class User implements UserDetails {
 	@JsonIgnoreProperties({ "owner" })
 	private List<URL> urls;
 
-	@Transient
-	private List<CallStatistics> stats;
-
 	protected UserRole userRole = UserRole.ROLE_USER;
 
 	public User() {
