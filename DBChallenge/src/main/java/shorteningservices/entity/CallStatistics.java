@@ -100,10 +100,14 @@ public class CallStatistics {
 
 	public void recordCall(User caller, LocalDateTime callTime) {
 		this.callers.add(caller);
-		this.callsTotal = this.callsTotal+1;
+		this.callsTotal = this.callsTotal + 1;
 		this.callTimes.add(callTime);
 	}
 
+	/**
+	 * The following toString method is intended for printing a summary of the
+	 * Statistics retrieved through logging calls thto the created shortURLs
+	 */
 	@Override
 	public String toString() {
 		List<String> usernames = new LinkedList<String>();

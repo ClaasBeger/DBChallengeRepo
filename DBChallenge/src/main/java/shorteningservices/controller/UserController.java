@@ -35,7 +35,7 @@ public class UserController {
 
 	@Autowired
 	private URLService urlService;
-	
+
 	@Autowired
 	private StatisticsService statService;
 
@@ -63,7 +63,8 @@ public class UserController {
 		}
 		owner.addURL(newURL);
 		System.out.println("Adding custom entry : " + newURL.toString());
-		newURL.setStats(new CallStatistics(null, LocalDateTime.now(), new LinkedList<LocalDateTime>(),0, new LinkedList<User>()));
+		newURL.setStats(new CallStatistics(null, LocalDateTime.now(), new LinkedList<LocalDateTime>(), 0,
+				new LinkedList<User>()));
 		urlService.saveURL(newURL);
 		service.save(owner);
 		statService.saveStats(newURL.getStats());
@@ -103,7 +104,8 @@ public class UserController {
 				+ urlService.findOriginalByAlias(alias));
 		urlService.findByID(urlService.findObjectIDByOriginal(urlService.findOriginalByAlias(alias))).getStats()
 				.recordCall(service.findById(id), LocalDateTime.now());
-		statService.saveStats(urlService.findByID(urlService.findObjectIDByOriginal(urlService.findOriginalByAlias(alias))).getStats());
+		statService.saveStats(urlService
+				.findByID(urlService.findObjectIDByOriginal(urlService.findOriginalByAlias(alias))).getStats());
 		response.sendRedirect("http://" + urlService.findOriginalByAlias(alias));
 	}
 

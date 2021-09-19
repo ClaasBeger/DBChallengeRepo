@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @SuppressWarnings("serial")
 @Entity
 public class User implements UserDetails {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int ID;
@@ -36,22 +36,23 @@ public class User implements UserDetails {
 	private String firstName;
 	@NotBlank
 	private String lastName;
-	//@Email
+	// @Email
 	private String username;
 	@NotBlank
 	private String password;
-	
+
 	@OneToMany(mappedBy = "owner", cascade = CascadeType.PERSIST)
-	@JsonIgnoreProperties({"owner"})
+	@JsonIgnoreProperties({ "owner" })
 	private List<URL> urls;
-	
+
 	@Transient
 	private List<CallStatistics> stats;
-	
+
 	protected UserRole userRole = UserRole.ROLE_USER;
-	
-	public User() {}
-	
+
+	public User() {
+	}
+
 	public User(String firstName, String lastName, String username, String password) {
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -99,21 +100,21 @@ public class User implements UserDetails {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
 	public List<URL> getURLs() {
 		return this.urls;
 	}
-	
+
 	public void setURLs(List<URL> newURLs) {
 		newURLs.forEach(n -> n.setUser(this));
 		this.urls = newURLs;
 	}
-	
+
 	public void addURL(URL newURL) {
 		newURL.setUser(this);
 		this.urls.add(newURL);
 	}
-	
+
 	public void removeURL(URL remURL) {
 		remURL.setUser(null);
 		this.urls.remove(remURL);
@@ -124,11 +125,11 @@ public class User implements UserDetails {
 		return "User [id=" + ID + ", firstName=" + firstName + ", lastName=" + lastName + ", username=" + username
 				+ ", password=" + password;
 	}
-	
+
 	public String signature() {
-		return firstName + " "+ lastName+" (ID: "+ID+")";
+		return firstName + " " + lastName + " (ID: " + ID + ")";
 	}
-    
+
 	@JsonIgnore
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -141,7 +142,7 @@ public class User implements UserDetails {
 	public String getUsername() {
 		return this.getusername();
 	}
-	
+
 	@JsonIgnore
 	public void setUsername(String username) {
 		this.username = username;
@@ -150,7 +151,7 @@ public class User implements UserDetails {
 	@JsonIgnore
 	@Override
 	public boolean isAccountNonExpired() {
-        return true;
+		return true;
 	}
 
 	@JsonIgnore

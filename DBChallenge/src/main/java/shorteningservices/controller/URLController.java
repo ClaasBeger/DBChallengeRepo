@@ -38,7 +38,7 @@ public class URLController {
 
 	@Autowired
 	private URLService urlService;
-	
+
 	@Autowired
 	private StatisticsService statService;
 
@@ -55,9 +55,10 @@ public class URLController {
 	@GetMapping("/shortenedURL/{alias}")
 	public void redirect(@PathVariable String alias, HttpServletResponse response) throws IOException {
 		System.out.println("Gonna send redirect to " + urlService.findOriginalByAlias(alias));
-		urlService.findByID(urlService.findObjectIDByOriginal(urlService.findOriginalByAlias(alias))).getStats().recordCall(null,
-				LocalDateTime.now());
-		statService.saveStats(urlService.findByID(urlService.findObjectIDByOriginal(urlService.findOriginalByAlias(alias))).getStats());
+		urlService.findByID(urlService.findObjectIDByOriginal(urlService.findOriginalByAlias(alias))).getStats()
+				.recordCall(null, LocalDateTime.now());
+		statService.saveStats(urlService
+				.findByID(urlService.findObjectIDByOriginal(urlService.findOriginalByAlias(alias))).getStats());
 		response.sendRedirect("http://" + urlService.findOriginalByAlias(alias));
 	}
 
@@ -67,7 +68,8 @@ public class URLController {
 			newURL.setAlias(URLShortenerApplication.hashToString(Math.abs(newURL.getOriginal().hashCode())));
 		}
 		System.out.println(newURL.toString());
-		newURL.setStats(new CallStatistics(null, LocalDateTime.now(), new LinkedList<LocalDateTime>(),0, new LinkedList<User>()));
+		newURL.setStats(new CallStatistics(null, LocalDateTime.now(), new LinkedList<LocalDateTime>(), 0,
+				new LinkedList<User>()));
 		urlService.saveURL(newURL);
 		statService.saveStats(newURL.getStats());
 	}
@@ -81,10 +83,11 @@ public class URLController {
 	void deleteURL(@PathVariable int id) {
 		urlService.deleteById(id);
 	}
-	
+
 	@GetMapping("/urls/{alias}/showStats")
 	String displayStatistics(@PathVariable String alias) {
-		return urlService.findByID(urlService.findObjectIDByOriginal(urlService.findOriginalByAlias(alias))).getStats().toString();
+		return urlService.findByID(urlService.findObjectIDByOriginal(urlService.findOriginalByAlias(alias))).getStats()
+				.toString();
 	}
 
 }

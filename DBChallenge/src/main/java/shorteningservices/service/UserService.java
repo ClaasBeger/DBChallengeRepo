@@ -2,7 +2,6 @@ package shorteningservices.service;
 
 import java.text.MessageFormat;
 
-
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +28,8 @@ public class UserService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		final Optional<User> optionalUser = userRepository.findByUsername(username);
-		System.out.println("-------------------------------------- Searching for "+username+" in User Database-----------------------------------------");
+		System.out.println("-------------------------------------- Searching for " + username
+				+ " in User Database-----------------------------------------");
 		if (optionalUser.isPresent()) {
 			System.out.println("Not Found");
 			return optionalUser.get();
@@ -41,7 +41,6 @@ public class UserService implements UserDetailsService {
 		newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
 		final User createdUser = userRepository.save(newUser);
 	}
-	
 
 	public Iterable<User> findAll() {
 		return userRepository.findAll();
@@ -62,16 +61,16 @@ public class UserService implements UserDetailsService {
 		}
 
 	}
-	
+
 	public void replaceUsername(User updatedUser) {
 		userRepository.replaceUsername(updatedUser.getId(), updatedUser.getUsername());
 	}
-	
+
 	public void replacePassword(User updatedUser) {
 		userRepository.replacePassword(updatedUser.getId(), bCryptPasswordEncoder.encode(updatedUser.getPassword()));
 	}
-	
-	public Iterable<URL> findAllURLs(Integer UserID){
+
+	public Iterable<URL> findAllURLs(Integer UserID) {
 		return userRepository.findAllURLs(UserID).orElseThrow(() -> new UserNotFoundException(UserID));
 	}
 }

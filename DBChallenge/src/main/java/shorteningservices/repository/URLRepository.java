@@ -9,16 +9,16 @@ import org.springframework.transaction.annotation.Transactional;
 import shorteningservices.entity.URL;
 
 @Repository
-public interface URLRepository extends JpaRepository<URL,Integer> {
+public interface URLRepository extends JpaRepository<URL, Integer> {
 
 	@Query("SELECT u.original FROM URL u WHERE u.alias=?1")
 	String findOriginalByAlias(String alias);
-	
+
 	@Transactional
 	@Modifying
 	@Query("UPDATE URL u SET u.alias=?1 WHERE u.original=?2")
 	Integer replaceAlias(String alias, String original);
-	
+
 	@Query("SELECT u.id FROM URL u WHERE u.original=?1")
 	Integer findObjectIDByOriginal(String original);
 

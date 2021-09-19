@@ -17,4 +17,25 @@ public class GlobalExceptionHandling {
 		return ex.getMessage();
 	}
 
+	@ResponseBody
+	@ExceptionHandler(StatisticsNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	String StatisticsNotFoundHandler(StatisticsNotFoundException ex) {
+		return ex.getMessage();
+	}
+
+	@ResponseBody
+	@ExceptionHandler(URLNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	String URLNotFoundHandler(URLNotFoundException ex) {
+		return ex.getMessage();
+	}
+
+	@ResponseBody
+	@ExceptionHandler(UserNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	String UserNotFoundHandler(UserNotFoundException ex) {
+		return ex.getMessage();
+	}
+
 }

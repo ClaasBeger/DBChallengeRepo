@@ -15,19 +15,19 @@ public class StatisticsService {
 
 	@Autowired
 	private StatisticsRepository statsRepo;
-	
-	public CallStatistics saveStats (CallStatistics newStats) {
+
+	public CallStatistics saveStats(CallStatistics newStats) {
 		return statsRepo.save(newStats);
 	}
-	
-	public Iterable<CallStatistics> findAll(){
+
+	public Iterable<CallStatistics> findAll() {
 		return statsRepo.findAll();
 	}
-	
+
 	public CallStatistics findByID(int id) {
 		return statsRepo.findById(id).orElseThrow(() -> new StatisticsNotFoundException(id));
 	}
-	
+
 	public void deleteById(int id) {
 
 		try {
