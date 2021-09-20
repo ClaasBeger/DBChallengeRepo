@@ -70,7 +70,7 @@ public class URLShortenerApplicationUnitTests {
 	public void recordCall() {
 		URL testURL = new URL("www.google.com", "alias", null);
 		testURL.setStats(new CallStatistics(null, LocalDateTime.now(), new LinkedList<LocalDateTime>(), 0,
-				new LinkedList<User>()));
+				new LinkedList<String>()));
 		LocalDateTime creationTime = LocalDateTime.now();
 		testURL.getStats().recordCall(null, creationTime);
 
